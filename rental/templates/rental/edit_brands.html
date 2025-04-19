@@ -1,0 +1,153 @@
+{% extends 'rental/admin_dashboard.html' %}
+
+{% block content %}
+<div class="main-content animate__animated animate__fadeIn">
+    <h2 class="page-title">Edit Brand</h2>
+
+    <form method="POST" class="edit-form glassmorphism">
+        {% csrf_token %}
+        <div class="form-group">
+            {% for field in form %}
+                <div class="form-field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="update-btn">Update Brand</button>
+    </form>
+
+    <p><a href="{% url 'manage_brands' %}" class="back-link">← Back to Manage Brands</a></p>
+</div>
+
+<!-- Animate.css CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #dbeafe, #93c5fd);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .main-content {
+        padding: 20px;  /* Reduced padding */
+        background: rgba(255, 255, 255, 0.2); /* Lighter background */
+        border-radius: 15px;  /* Smaller radius */
+        backdrop-filter: blur(8px);  /* Less blur effect */
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);  /* Smaller shadow */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        max-width: 900px; /* Smaller max-width */
+        margin: 0 auto; /* Center the content */
+    }
+
+    .main-content:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .page-title {
+        font-size: 32px;  /* Reduced font size */
+        color: #1e3a8a;
+        margin-bottom: 25px;  /* Reduced margin */
+        text-align: center;
+        font-weight: 700;
+        position: relative;
+    }
+
+    .page-title::after {
+        content: "";
+        display: block;
+        width: 60px;  /* Reduced width */
+        height: 4px;
+        margin: 10px auto 0;
+        background: #1e40af;
+        border-radius: 5px;
+        animation: expand 1s ease forwards;
+    }
+
+    @keyframes expand {
+        from { width: 0; }
+        to { width: 60px; }
+    }
+
+    .edit-form {
+        max-width: 500px;  /* Smaller max-width */
+        margin: 0 auto;
+        padding: 15px;  /* Reduced padding */
+    }
+
+    .form-group {
+        margin-bottom: 20px;  /* Reduced margin */
+    }
+
+    .form-field {
+        margin-bottom: 15px;  /* Reduced margin */
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px 12px;  /* Reduced padding */
+        border-radius: 8px;  /* Smaller border radius */
+        border: 1px solid #ccc;
+        font-size: 14px;  /* Smaller font size */
+        transition: all 0.3s ease;
+        background-color: rgba(255, 255, 255, 0.8);  /* Slightly lighter background */
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #1e40af;
+        box-shadow: 0 0 5px rgba(30, 64, 175, 0.5);
+        background-color: white;
+        outline: none;
+    }
+
+    .update-btn {
+        width: 100%;
+        padding: 12px;  /* Reduced padding */
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #1e40af, #2563eb);
+        color: #fff;
+        font-size: 16px;  /* Smaller font size */
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 1px;
+    }
+
+    .update-btn:hover {
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;  /* Reduced margin */
+        font-size: 14px;  /* Smaller font size */
+        color: #1e40af;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: #374151;
+    }
+
+    /* Glassmorphism Effect */
+    .glassmorphism {
+        background: rgba(255, 255, 255, 0.1); /* Lighter background */
+        backdrop-filter: blur(8px);  /* Slightly reduced blur */
+        border-radius: 10px;  /* Smaller border radius */
+        padding: 15px;  /* Reduced padding */
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Smaller shadow */
+        border: 1px solid rgba(255, 255, 255, 0.3); /* Lighter border */
+    }
+</style>
+{% endblock %}

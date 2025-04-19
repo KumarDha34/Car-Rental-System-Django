@@ -1,0 +1,208 @@
+{% comment %} {% extends "index.html" %} {% endcomment %}
+{% block content %}
+<nav class="navbar">
+    <div class="logo">🚗 CarRental</div>
+    <ul>
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'index' %}">Features</a></li>
+        <li><a href="{% url 'index' %}">FAQs</a></li>
+    </ul>
+</nav>
+<div class="container">
+    <div class="login-box">
+        <h2>Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="submit-btn">Login</button>
+            <p><a href="#" class="forgot-password">Forgot Password?</a></p>
+        </form>
+        <p class="signup-link">Don't have an account? <a href="{% url 'user_signup' %}">Sign up</a></p>
+    </div>
+</div>
+{% endblock %}
+<style>
+    /* Basic Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(45deg, #6c63ff, #3b4cca);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.navbar .logo {
+    font-size: 30px;
+    font-weight: bold;
+    color: #ffcc00;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.navbar .logo:hover {
+    transform: scale(1.1);
+}
+
+.navbar ul {
+    margin-right: 100px;
+    list-style: none;
+    display: flex;
+}
+
+.navbar ul li {
+    margin: 0 20px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    color: #ffcc00;
+}
+
+/* Login Box Styling */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.login-box {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 40px;
+    width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeIn 1s forwards;
+}
+
+h2 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input,
+button {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: #6c63ff;
+    outline: none;
+}
+
+button {
+    background-color: #6c63ff;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: #5a52e6;
+    transform: scale(1.05);
+}
+
+/* Forgot Password Link */
+.forgot-password {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: #5a52e6;
+}
+
+/* Signup Link */
+.signup-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.signup-link a {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.signup-link a:hover {
+    color: #5a52e6;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .login-box {
+        width: 90%; /* Make login box flexible */
+        padding: 20px;
+    }
+
+    .navbar ul {
+        display: none; /* Hide navbar links on smaller screens */
+    }
+}
+
+</style>

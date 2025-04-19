@@ -1,0 +1,84 @@
+{% extends 'rental/admin_dashboard.html' %}
+
+{% block content %}
+
+<style>
+body {
+    background: linear-gradient(to right, #141e30, #243b55);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.delete-container {
+    max-width: 600px;
+    margin: 100px auto;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    animation: popIn 0.8s ease;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.delete-container h2 {
+    margin-bottom: 25px;
+    font-size: 24px;
+    text-shadow: 1px 1px 5px black;
+}
+
+form button {
+    background: #e53935;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-right: 15px;
+}
+
+form button:hover {
+    background: #b71c1c;
+    transform: scale(1.05);
+}
+
+.cancel-link {
+    background: #00c853;
+    padding: 12px 30px;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.cancel-link:hover {
+    background: #009624;
+    transform: scale(1.05);
+}
+</style>
+
+<div class="delete-container">
+
+    <h2>Are you sure you want to delete "<span style="color: #ffeb3b;">{{ car.name }}</span>"?</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, Delete</button>
+        <a href="{% url 'manage_cars' %}" class="cancel-link">Cancel</a>
+    </form>
+
+</div>
+
+{% endblock %}

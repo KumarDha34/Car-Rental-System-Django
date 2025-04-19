@@ -1,0 +1,113 @@
+{% extends "rental/user_dashboard.html" %}
+{% block content %}
+
+<style>
+    body {
+        background: #f6f9fc;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 40px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        animation: slideIn 1s ease forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    @keyframes slideIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 28px;
+    }
+
+    form p {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="file"],
+    select,
+    textarea {
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        outline: none;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #3498db, #8e44ad);
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+        background: linear-gradient(135deg, #2980b9, #6c3483);
+        transform: scale(1.03);
+    }
+    .profile-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #3498db;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-img:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        border-color: #6c5ce7;
+    }
+</style>
+
+<div class="container">
+    <h2>Update Profile</h2>
+    <form enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Update</button>
+    </form>
+</div>
+
+{% endblock %}

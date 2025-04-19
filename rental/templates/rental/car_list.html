@@ -1,0 +1,205 @@
+{% extends "rental/user_dashboard.html" %}
+
+{% block content %}
+    <!-- Search & Filter -->
+    <form method="GET" class="search-bar">
+        <input type="text" name="search" placeholder="Search Cars" value="{{ request.GET.search }}" class="search-input" />
+        
+        <!-- Brand Dropdown -->
+        <select name="brand" class="search-dropdown">
+            <option value="">All Brands</option>
+            {% if brands %}
+                {% for brand in brands %}
+                    <option value="{{ brand.id }}" {% if request.GET.brand == brand.id %}selected{% endif %}>{{ brand.name }}</option>
+                {% endfor %}
+            {% endif %}
+        </select>
+        
+        <button type="submit" class="search-button">Search</button>
+    </form>
+
+    <!-- Display Cars -->
+    <div class="car-grid">
+        {% if cars %}
+            {% for car in cars %}
+                <div class="car-card">
+                    {% if car.image %}
+                        <img src="{{ car.image.url }}" alt="{{ car.model }}" class="car-image" />
+                    {% else %}
+                        <p>No Image Available</p>
+                    {% endif %}
+                    <div class="car-info">
+                        <h3 class="car-brand">
+                            {% if car.brand %}
+                                {{ car.brand.name }} - {{ car.model }}
+                            {% else %}
+                                No Brand - {{ car.model }}
+                            {% endif %}
+                        </h3>
+                        <p class="car-price">Rs. {{ car.price_per_day }} per day</p>
+                        <a href="{% url 'car_details' car.id %}" class="btn car-btn">View Details</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-cars">No cars available.</p>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if cars.has_other_pages %}
+        <ul class="pagination">
+            {% if cars.has_previous %}
+                <li><a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}" class="page-link">&laquo; First</a></li>
+                <li><a href="?page={{ cars.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}" class="page-link">Previous</a></li>
+            {% endif %}
+            
+            {% for num in cars.paginator.page_range %}
+                {% if cars.number == num %}
+                    <li class="active"><span>{{ num }}</span></li>
+                {% elif num > cars.number|add:"-3" and num < cars.number|add:"3" %}
+                    <li><a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}" class="page-link">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if cars.has_next %}
+                <li><a href="?page={{ cars.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}" class="page-link">Next</a></li>
+                <li><a href="?page={{ cars.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}" class="page-link">Last &raquo;</a></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+    <style>
+        /* General Styles */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 10px;
+            background: #f4f7fb;
+            border-radius: 30px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-input, .search-dropdown, .search-button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+        }
+        
+        .search-button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .search-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Car Grid */
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .car-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .car-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .car-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid #4CAF50;
+            transition: opacity 0.3s ease;
+        }
+
+        .car-info {
+            padding: 1rem;
+            background: #fff;
+            text-align: center;
+            border-top: 2px solid #f4f7fb;
+        }
+
+        .car-brand {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .car-price {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #ff6347;
+        }
+
+        .car-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .car-btn:hover {
+            background-color: #45a049;
+        }
+
+        .no-cars {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #777;
+            font-style: italic;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            list-style-type: none;
+            padding: 20px 0;
+        }
+
+        .page-link {
+            padding: 10px 15px;
+            background-color: #f4f7fb;
+            color: #333;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .page-link:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .active span {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 30px;
+        }
+    </style>
+{% endblock %}

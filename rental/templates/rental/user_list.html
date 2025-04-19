@@ -1,0 +1,210 @@
+{% extends "rental/admin_dashboard.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background: #f4f6f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin-top:100px;
+        margin-left: 350px;
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 30px;
+        color: #343a40;
+        position: relative;
+    }
+
+    h2::after {
+        content: '';
+        width: 60px;
+        height: 4px;
+        background: #007bff;
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 10px;
+    }
+
+    .search-form {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 25px;
+    }
+
+    .search-form input {
+        width: 300px;
+        padding: 10px 15px;
+        border: 1px solid #ccc;
+        border-radius: 10px 0 0 10px;
+        outline: none;
+        transition: border 0.3s ease;
+    }
+
+    .search-form input:focus {
+        border-color: #007bff;
+    }
+
+    .search-form button {
+        padding: 10px 20px;
+        border: none;
+        background: #007bff;
+        color: white;
+        border-radius: 0 10px 10px 0;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .search-form button:hover {
+        background: #0056b3;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 15px;
+        animation: slideIn 0.8s ease-in-out;
+    }
+
+    thead {
+        background: linear-gradient(45deg, #007bff, #00c6ff);
+        color: white;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: center;
+    }
+
+    tbody tr {
+        transition: background 0.3s ease;
+    }
+
+    tbody tr:hover {
+        background: #f1f9ff;
+        transform: scale(1.01);
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        gap: 8px;
+    }
+
+    .pagination .page-item {
+        list-style: none;
+    }
+
+    .pagination .page-link {
+        padding: 10px 16px;
+        border: 1px solid #ddd;
+        color: #007bff;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .pagination .page-link:hover {
+        background: #007bff;
+        color: white;
+    }
+
+    .pagination .active .page-link {
+        background: #007bff;
+        color: white;
+        border: none;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(-40px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+</style>
+
+<div class="container">
+    <h2>User List</h2>
+
+    <!-- Search Form -->
+    <form method="get" class="search-form">
+        <input type="text" name="search" placeholder="Search by name or email" value="{{ request.GET.search }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- User Table -->
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if users %}
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ user.fullname }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone|default:"-" }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4">No users found.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <nav>
+        <ul class="pagination">
+            {% if users.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ users.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Previous</a>
+                </li>
+            {% endif %}
+
+            {% for num in users.paginator.page_range %}
+                {% if users.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > users.number|add:"-3" and num < users.number|add:"3" %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if users.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ users.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

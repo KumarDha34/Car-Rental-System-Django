@@ -1,0 +1,160 @@
+{% extends "rental/admin_dashboard.html" %}
+{% block content %}
+
+<style>
+  .manage-title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #2c3e50;
+    animation: fadeInDown 0.4s ease-in;
+  }
+
+  .booking-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-left: 300px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeInUp 0.5s ease both;
+  }
+
+  .booking-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .booking-info {
+    font-size: 17px;
+    margin-bottom: 8px;
+    color: #444;
+  }
+
+  .booking-status {
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+  }
+
+  .status-Pending {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  .status-Approved, .status-Confirmed {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .status-Rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .action-form {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .btn-action {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-approve {
+    background-color: #28a745;
+    color: #fff;
+  }
+
+  .btn-approve:hover {
+    background-color: #218838;
+    box-shadow: 0 0 8px #28a745;
+  }
+
+  .btn-reject {
+    background-color: #dc3545;
+    color: #fff;
+  }
+
+  .btn-reject:hover {
+    background-color: #c82333;
+    box-shadow: 0 0 8px #dc3545;
+  }
+
+  .btn-disabled {
+    background-color: #ccc !important;
+    color: #666 !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<h2 class="manage-title">📋 Manage Bookings</h2>
+
+{% for booking in bookings %}
+  <div class="booking-card">
+    <p class="booking-info">
+      <strong>User:</strong> {{ booking.user.fullname }} |
+      <strong>Car:</strong> {{ booking.car.name }} |
+      <strong>Payment:</strong> {{ booking.payment_status }}
+    </p>
+
+    <p class="booking-status status-{{ booking.status }}">{{ booking.status }}</p>
+
+    {% if booking.payment_status == "Paid" %}
+      <p style="color: #888; font-size: 14px;">✅ Payment completed. Actions disabled.</p>
+      <button class="btn-action btn-approve btn-disabled" disabled>✅ Approve</button>
+      <button class="btn-action btn-reject btn-disabled" disabled>❌ Reject</button>
+    {% else %}
+      <form action="{% url 'update_booking_status' booking.id %}" method="post" class="action-form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="approve">
+        <button type="submit" class="btn-action btn-approve">✅ Approve</button>
+      </form>
+
+      <form action="{% url 'update_booking_status' booking.id %}" method="post" class="action-form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="reject">
+        <button type="submit" class="btn-action btn-reject">❌ Reject</button>
+      </form>
+    {% endif %}
+  </div>
+{% empty %}
+  <p style="font-size: 18px; text-align: center; color: #888;">No bookings available.</p>
+{% endfor %}
+
+{% endblock %}

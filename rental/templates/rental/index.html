@@ -1,0 +1,430 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental | Rent Your Dream Car</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #121212;
+            color: white;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Background GIF */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("{% static 'images/airplane.gif' %}") no-repeat center center/cover;
+            opacity: 0.4;
+            z-index: -1;
+            animation: fadeIn 5s ease-in-out infinite alternate;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0.4;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .navbar .logo {
+            font-size: 30px;
+            font-weight: bold;
+            color: #ffcc00;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .navbar ul li {
+            margin: 0 20px;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #ffcc00;
+        }
+
+        .signup-btn {
+            padding: 12px 24px;
+            background: #ffcc00;
+            border: none;
+            color: black;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .signup-btn:hover {
+            background: #e6b800;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content {
+            z-index: 1;
+            max-width: 700px;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 50px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 18px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #e6b800;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 80px 50px;
+            text-align: center;
+            background: #1b1a1a;
+            animation: fadeInUp 2s ease-out;
+        }
+
+        .features-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .features-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            width: 280px;
+            text-align: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .feature-box:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-10px);
+        }
+
+        .feature-box i {
+            font-size: 50px;
+            margin-bottom: 10px;
+            color: #f9f9ff;
+        }
+
+        .feature-box h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 50px;
+            text-align: center;
+            background: #222;
+            animation: fadeInUp 2s ease-out;
+        }
+
+        .faq-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .faq {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .faq:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .faq-answer {
+            display: none;
+            font-size: 18px;
+            padding-top: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background: black;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            animation: fadeInUp 3s ease-out;
+        }
+
+        /* Additional Styles for FAQ Toggle Animation */
+        .faq-answer {
+    opacity: 0;
+    max-height: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+}
+
+.faq-answer.open {
+    opacity: 1;
+    max-height: 1000px; /* Adjust as needed */
+    transform: scaleY(1);
+}
+    </style>
+</head>
+
+<body>
+    <!-- Background GIF -->
+    <div class="bg-animation"></div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">🚗 CarRental</div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#faq">FAQs</a></li>
+        </ul>
+        <button class="signup-btn"><a href="{% url 'user_signup' %}">Signup</a></button>
+    </nav>
+    <!-- Hero Section -->
+    <div class="hero" id="home">
+        <div class="hero-content">
+            <h1>Drive Your Dream Car Today!</h1>
+            <p>Luxury, Comfort, and Affordable Rentals.</p>
+            <a href="#" class="btn">Book Now</a>
+        </div>
+    </div>
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <h2>Why Choose Us?</h2>
+        <div class="features-container">
+            <div class="feature-box">
+                <i class="fas fa-tag"></i>
+                <h3>Affordable Prices</h3>
+                <p>Get the best deals on top-quality cars.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-car-side"></i>
+                <h3>Wide Range of Cars</h3>
+                <p>Choose from economy, luxury, and SUVs.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-clock"></i>
+                <h3>24/7 Support</h3>
+                <p>We're available around the clock for assistance.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Safe & Secure</h3>
+                <p>All vehicles are fully insured and maintained.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-route"></i>
+                <h3>Flexible Rentals</h3>
+                <p>Daily, weekly, and monthly rental plans.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-globe"></i>
+                <h3>Multiple Locations</h3>
+                <p>Pick up and drop off at convenient locations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-container">
+            <div class="faq">
+                <div class="faq-question">How do I rent a car? <span class="toggle-icon">+</span></div>
+                <div class="faq-answer">You can book a car online or visit our nearest branch.</div>
+            </div>
+            <div class="faq">
+                <div class="faq-question">What documents do I need? <span class="toggle-icon">+</span></div>
+                <div class="faq-answer">You need a valid driver's license and ID proof.</div>
+            </div>
+            <div class="faq">
+                <div class="faq-question">Is insurance included in the rental? <span class="toggle-icon">+</span></div>
+                <div class="faq-answer">Yes, all our cars come with basic insurance coverage. Additional coverage is
+                    available upon request.</div>
+            </div>
+            <div class="faq">
+                <div class="faq-question">Can I rent a car without a credit card? <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">Yes, we accept debit cards and cash deposits in some locations. Contact us for
+                    more details.</div>
+            </div>
+            <div class="faq">
+                <div class="faq-question">Do you offer long-term rentals? <span class="toggle-icon">+</span></div>
+                <div class="faq-answer">Yes, we offer special discounts on weekly and monthly rentals.</div>
+            </div>
+            <div class="faq">
+                <div class="faq-question">Can I return the car to a different location? <span
+                        class="toggle-icon">+</span></div>
+                <div class="faq-answer">Yes, we offer one-way rentals. Additional charges may apply.</div>
+            </div>
+            <div class="faq">
+                <div class="faq-question">What happens if I return the car late? <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">A late return fee may apply. Please check our rental terms for details.</div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        &copy; 2025 Car Rental. All Rights Reserved.
+    </footer>
+
+    <!-- JavaScript for FAQ Toggle -->
+    <script>
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                let answer = item.nextElementSibling;
+                let icon = item.querySelector('.toggle-icon');
+        
+                if (answer.classList.contains('open')) {
+                    answer.classList.remove('open');
+                    icon.textContent = "+";
+                } else {
+                    answer.classList.add('open');
+                    icon.textContent = "-";
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

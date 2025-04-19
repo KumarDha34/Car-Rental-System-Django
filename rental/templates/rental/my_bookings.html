@@ -1,0 +1,177 @@
+{% extends "rental/user_dashboard.html" %}
+{% block content %}
+
+<style>
+  .booking-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 10px;
+  }
+
+  .booking-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .booking-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.1);
+  }
+
+  .booking-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 12px;
+  }
+
+  .booking-detail {
+    font-size: 16px;
+    margin-bottom: 6px;
+    color: #444;
+  }
+
+  .booking-detail strong {
+    color: #333;
+  }
+
+  .status-badge {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 12px;
+    margin-top: 8px;
+  }
+
+  .status-Confirmed {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .status-Pending {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  .status-Rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  .pay-btn {
+    margin-top: 14px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .pay-btn.active {
+    background-color: #28a745;
+    color: #fff;
+  }
+
+  .pay-btn.active:hover {
+    background-color: #218838;
+    box-shadow: 0 0 10px #28a745;
+  }
+
+  .pay-btn.disabled {
+    background-color: #aaa;
+    color: #fff;
+    cursor: not-allowed;
+  }
+
+  h2.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInDown 0.5s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<h2 class="page-title">🚘 My Bookings</h2>
+
+<div class="booking-container">
+  {% for booking in bookings %}
+    <div class="booking-card">
+      <div class="booking-title">{{ booking.car.name }}</div>
+
+      <p class="booking-detail"><strong>Brand:</strong> {{ booking.car.brand.name }}</p>
+      <p class="booking-detail"><strong>Model:</strong> {{ booking.car.model }}</p>
+      <p class="booking-detail"><strong>Booking Code:</strong> {{ booking.booking_code }}</p>
+      <p class="booking-detail"><strong>Location:</strong> {{ booking.location }}</p>
+      <p class="booking-detail"><strong>Start Date:</strong> {{ booking.start_date }}</p>
+      <p class="booking-detail"><strong>End Date:</strong> {{ booking.end_date }}</p>
+      <p class="booking-detail"><strong>Total Price:</strong> Rs. {{ booking.total_price }}</p>
+
+      <div class="status-badge status-{{ booking.status }}">
+        {% if booking.status == 'Rejected' %}
+          Rejected
+        {% else %}
+          {{ booking.status }}
+        {% endif %}
+      </div>
+
+      <div class="status-badge"
+        style="background-color: {% if booking.payment_status == 'Paid' %}#d4edda{% else %}#f0f0f0{% endif %};
+               color: {% if booking.payment_status == 'Paid' %}#155724{% else %}#333{% endif %}; margin-top: 4px;">
+        Payment: {{ booking.payment_status }}
+      </div>
+
+      {% if booking.status == "Confirmed" and booking.payment_status != "Paid" %}
+        <form action="{% url 'initiate_payment' booking.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="pay-btn active">💳 Pay Now</button>
+        </form>
+      {% elif booking.payment_status == "Paid" %}
+        {% if booking.payment %}
+          <p class="booking-detail"><strong>Payment Method:</strong> {{ booking.payment.payment_method }}</p>
+          <p class="booking-detail"><strong>Txn ID:</strong> {{ booking.payment.transaction_id }}</p>
+        {% endif %}
+        <button type="button" class="pay-btn disabled" disabled>Paid</button>
+      {% else %}
+        <button type="button" class="pay-btn disabled" disabled>Pay Now ({{ booking.status }})</button>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p style="text-align:center; font-size: 18px; color: #999;">You have no bookings yet.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

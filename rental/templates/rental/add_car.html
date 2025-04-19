@@ -1,0 +1,104 @@
+{% extends 'rental/admin_dashboard.html' %}
+
+{% block content %}
+
+<style>
+body {
+    background: linear-gradient(to right, #00c6ff, #0072ff);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.add-car-container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    animation: slideIn 1s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.add-car-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+}
+
+.add-car-container form input, 
+.add-car-container form select, 
+.add-car-container form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.8);
+    transition: 0.3s;
+}
+
+.add-car-container form input:focus,
+.add-car-container form select:focus,
+.add-car-container form textarea:focus {
+    background: #fff;
+    outline: none;
+    transform: scale(1.05);
+}
+
+.add-car-container button {
+    width: 100%;
+    padding: 12px;
+    background: #ff4b2b;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-car-container button:hover {
+    background: #ff416c;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.back-link {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+    color: #ffd700;
+}
+</style>
+
+<div class="add-car-container">
+    <h2>Add New Car</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Car</button>
+    </form>
+
+    <a href="{% url 'manage_cars' %}" class="back-link">← Back to Car Management</a>
+</div>
+
+{% endblock %}

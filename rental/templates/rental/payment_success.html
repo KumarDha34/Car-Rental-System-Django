@@ -1,0 +1,74 @@
+<html>
+<head>
+    <title>Payment Success</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .success-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .success-container h2 {
+            color: #28a745;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .success-container p {
+            font-size: 16px;
+            margin: 8px 0;
+            color: #333;
+        }
+
+        .success-container a {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .success-container a:hover {
+            background-color: #0056b3;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <h2>🎉 Payment Successful!</h2>
+
+        {% if booking %}
+            <p><strong>Booking ID:</strong> {{ booking.id }}</p>
+            <p><strong>Car:</strong> {{ booking.car.name }}</p>
+            <p><strong>Total Amount:</strong> Rs. {{ booking.total_price }}</p>
+            <p><strong>Status:</strong> {{ booking.status }}</p>
+        {% else %}
+            <p>⚠️ Sorry, we couldn't find the booking associated with this transaction.</p>
+        {% endif %}
+
+        <a href="{% url 'my_bookings' %}">Back to My Bookings</a>
+    </div>
+</body>
+</html>

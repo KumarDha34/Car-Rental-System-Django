@@ -1,0 +1,106 @@
+{% extends 'rental/admin_dashboard.html' %}
+
+{% block content %}
+
+<style>
+body {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.edit-container {
+    max-width: 600px;
+    margin: 60px auto;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    animation: slideFade 1s ease;
+    color: #fff;
+}
+
+@keyframes slideFade {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.edit-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    text-shadow: 2px 2px 5px #000;
+}
+
+form input, form select, form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+form input:focus, form select:focus, form textarea:focus {
+    outline: none;
+    background: #fff;
+    transform: scale(1.02);
+}
+
+form button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #00c853;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+form button:hover {
+    background: #009624;
+    transform: scale(1.05);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #ffeb3b;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.back-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+</style>
+
+<div class="edit-container">
+
+    <h2>Edit Car Details</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update Car</button>
+    </form>
+
+    <a href="{% url 'manage_cars' %}" class="back-link">← Back to Manage Cars</a>
+
+</div>
+
+{% endblock %}

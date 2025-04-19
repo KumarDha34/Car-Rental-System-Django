@@ -1,0 +1,268 @@
+{% extends 'rental/admin_dashboard.html' %}
+
+{% block content %}
+
+<style>
+body {
+    background: linear-gradient(120deg, #e0eafc, #cfdef3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Page Container */
+.manage-container {
+    max-width: 1000px;
+    margin: 100px auto;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+/* Title */
+.manage-container h2 {
+    font-size: 2.5rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 1px 2px 3px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+.manage-container h2::after {
+    content: '';
+    width: 80px;
+    height: 4px;
+    background: #2563eb;
+    display: block;
+    margin: 10px auto 0;
+    border-radius: 5px;
+}
+
+/* Form Container */
+.form-container {
+    width: 900px;
+    margin-left: 150px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(14px);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    animation: popIn 0.7s ease-in-out;
+    position: relative;
+}
+
+/* Add Car Button */
+.add-car-btn {
+    position: absolute;
+    top: -25px;
+    right: -25px;
+    background: #28a745;
+    color: white;
+    width: 55px;
+    height: 55px;
+    font-size: 30px;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: 0.3s ease-in-out;
+    z-index: 2;
+}
+.add-car-btn:hover {
+    background: #218838;
+    transform: scale(1.1) rotate(10deg);
+}
+
+/* Search Form */
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+form input[type="text"] {
+    width: 300px;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px 0 0 10px;
+    outline: none;
+    transition: 0.3s ease-in-out;
+}
+form input[type="text"]:focus {
+    border-color: #2563eb;
+}
+form button {
+    padding: 12px 20px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0 10px 10px 0;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+form button:hover {
+    background: #1e40af;
+    transform: scale(1.05);
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    animation: fadeInUp 1s ease;
+}
+
+th, td {
+    padding: 18px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+}
+
+th {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background: #f0f8ff;
+    transform: scale(1.01);
+    transition: 0.3s ease;
+}
+
+/* Action Icons */
+td a {
+    margin: 0 6px;
+    font-size: 16px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+.edit-icon {
+    background: #ffd700;
+    color: #333;
+}
+.edit-icon:hover {
+    background: #ffc107;
+    transform: scale(1.1);
+}
+.delete-icon {
+    background: #ff4b2b;
+    color: white;
+}
+.delete-icon:hover {
+    background: #dc3545;
+    transform: scale(1.1);
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    font-size: 16px;
+}
+.pagination a {
+    background: #2563eb;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+.pagination a:hover {
+    background: #1e40af;
+    transform: scale(1.1);
+}
+</style>
+
+<!-- Content -->
+<div class="manage-container">
+    <h2>Manage Cars</h2>
+
+    <div class="form-container">
+        <a href="{% url 'add_car' %}" class="add-car-btn">+</a>
+
+        <!-- Search Form -->
+        <form method="get">
+            <input type="text" name="search" placeholder="Search Car">
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Car Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for car in cars %}
+                <tr>
+                    <td>{{car.name}}</td>
+                    <td>{{ car.brand.name }}</td>
+                    <td>{{ car.model }}</td>
+                    <td>Rs. {{ car.price_per_day }}</td>
+                    <td>
+                        <a href="{% url 'edit_car' car.id %}" class="edit-icon">✏️ Edit</a>
+                        <a href="{% url 'delete_car' car.id %}" class="delete-icon">🗑️ Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No cars found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            {% if cars.has_previous %}
+                <a href="?page={{ cars.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            Page {{ cars.number }} of {{ cars.paginator.num_pages }}
+
+            {% if cars.has_next %}
+                <a href="?page={{ cars.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

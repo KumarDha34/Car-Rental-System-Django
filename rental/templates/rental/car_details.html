@@ -1,0 +1,153 @@
+<html>
+<head>
+    <title>{{ car.name }}</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #ffffff);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            animation: fadeIn 1.2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            max-width: 900px;
+            width: 90%;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            animation: popUp 1s ease;
+        }
+
+        @keyframes popUp {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .car-container {
+            text-align: center;
+        }
+
+        .car-container img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .car-container img:hover {
+            transform: scale(1.03);
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #3498db;
+            margin-bottom: 1rem;
+            animation: fadeInSpec 1.5s ease;
+        }
+
+        @keyframes fadeInSpec {
+            0% { opacity: 0; transform: translateX(-20px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        h4 {
+            color: #e74c3c;
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        a {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #4CAF50, #2ecc71);
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: linear-gradient(135deg, #43a047, #27ae60);
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #3498db, #6dd5fa);
+        }
+
+        .btn-back:hover {
+            background: linear-gradient(135deg, #2980b9, #57c3f3);
+        }
+
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .car-container img {
+                max-height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="car-container">
+            <h2>{{ car.name }}</h2>
+            <img src="{{ car.image.url }}" alt="{{ car.name }}">
+            <h3>{{ car.model }} - {{ car.brand }}</h3>
+            <h4>Rs. {{ car.price_per_day }} per day</h4>
+            <div class="btn-group">
+                {% if not_available %}
+    <p class="text-danger">This car is already booked for your selected dates.</p>
+{% else %}
+    <a href="{% url 'book_car' car.id %}">Book Now</a>
+{% endif %}
+                <a href="{% url 'car_list' %}" class="btn-back">Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

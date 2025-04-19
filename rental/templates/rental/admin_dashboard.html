@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Car Rental System</title>
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 260px;
+            background: linear-gradient(to bottom, #1e3a8a, #1e40af);
+            padding: 20px 10px;
+            transition: 0.3s;
+            overflow-x: hidden;
+        }
+        
+        .sidebar h1 {
+            color: white;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+        }
+
+        .sidebar h1 span {
+            color: #facc15;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 30px;
+            position: relative; /* Ensure the dropdown is correctly positioned relative to the li */
+        }
+
+        .sidebar a {
+            cursor: pointer;
+            color: #d1d5db;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: white;
+        }
+
+        .sidebar i {
+            font-size: 20px;
+            margin-right: 20px;
+            min-width: 20px;
+        }
+
+        .dropdown {
+            display: none;
+            position: relative;
+            top: 10px;
+            left: 0; /* was 100%, changed to 0 */
+            background-color: #1e40af;
+            width: 100%; /* or auto */
+            border-radius: 10px;
+            padding: 10px 0;
+            z-index: 1;
+        }
+        
+
+        .dropdown a {
+            color: #d1d5db;
+            padding: 10px 20px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .dropdown a:hover {
+            color: white;
+            background-color: #374151;
+        }
+
+        .main-content {
+            margin-left: 80px;
+            padding: 40px;
+            transition: 0.3s;
+        }
+
+        .main-content h2 {
+            font-size: 28px;
+            color:rgb(0, 0, 0);
+            margin-bottom: 30px;
+            margin-left: 200px;
+        }
+
+        .logout {
+            color: #f87171;
+        }
+
+        .logout:hover {
+            color: #ef4444;
+        }
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+            padding: 0 20px;
+            margin-left: 300px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(120deg, #3b82f6, #6366f1, #ec4899);
+            transform: rotate(25deg);
+            z-index: 0;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .stat-card h2 {
+            font-size: 1.2em;
+            color: #374151;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-card p {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #111827;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-card ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-card ul li {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h1>CR<span>S</span></h1>
+    <ul>
+        <li><a href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        
+        <!-- Brand Dropdown -->
+        <li>
+            <a href="#" id="brandsLink"><i class="fas fa-box"></i> Brand</a>
+            <!-- Dropdown for Brand -->
+            <ul class="dropdown" id="brandsDropdown">
+                <li><a href="{% url 'add_brand' %}">Add Brand</a></li>
+                <li><a href="{% url 'manage_brands' %}">Manage Brands</a></li>
+            </ul>
+        </li>
+
+        
+        <!-- Car Dropdown -->
+        <li>
+            <a href="#" id="CarsLink"><i class="fas fa-box"></i> Car</a>
+            <!-- Dropdown for Car -->
+            <ul class="dropdown" id="carsDropdown">
+                <li><a href="{% url 'add_car' %}">Add Car</a></li>
+                <li><a href="{% url 'manage_cars' %}">Manage Cars</a></li>
+            </ul>
+        </li>
+
+        
+        <li><a href="{% url 'manage_bookings' %}"><i class="fas fa-book"></i> Bookings</a></li>
+        <li><a href="{% url 'user_list' %}"><i class="fas fa-users"></i> Users</a></li>
+        <li><a href="#"><i class="fas fa-user-cog"></i> Profile Settings</a></li>
+        <li><a href="{% url 'user_logout' %}" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+</div>
+<div class="content">
+    {% block content %}
+    <h1>Admin Dashboard</h1>
+
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h2>Total Cars</h2>
+            <p>{{ total_cars }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>Total Bookings</h2>
+            <p>{{ total_bookings }}</p>
+        </div>
+        <div class="stat-card">
+            <h2>Pending Bookings</h2>
+            <p>{{ pending_bookings }}</p>
+        </div>
+        <div class="stat-card">
+            <h2>Confirmed Bookings</h2>
+            <p>{{ confirmed_bookings}}</p>
+        </div>
+        <div class="stat-card">
+            <h2>Cancelled Bookings</h2>
+            <p>{{ cancelled_bookings }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>Active Users</h2>
+            <p>{{ active_users }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>Total Earnings</h2>
+            <p>Rs.{{ total_earnings|floatformat:2 }}</p>
+        </div>
+    </div>
+    <!-- The content from the child template will go here -->
+    {% endblock %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const brandsLink = document.getElementById('brandsLink');
+        const brandsDropdown = document.getElementById('brandsDropdown');
+        const carsLink = document.getElementById('CarsLink');
+        const carsDropdown = document.getElementById('carsDropdown');
+    
+        brandsLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            brandsDropdown.style.display = brandsDropdown.style.display === 'block' ? 'none' : 'block';
+            carsDropdown.style.display = 'none';
+        });
+    
+        carsLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            carsDropdown.style.display = carsDropdown.style.display === 'block' ? 'none' : 'block';
+            brandsDropdown.style.display = 'none';
+        });
+    
+        // Optional: Close dropdowns when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!brandsLink.contains(e.target) && !brandsDropdown.contains(e.target)) {
+                brandsDropdown.style.display = 'none';
+            }
+            if (!carsLink.contains(e.target) && !carsDropdown.contains(e.target)) {
+                carsDropdown.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

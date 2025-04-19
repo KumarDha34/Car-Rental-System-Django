@@ -1,0 +1,243 @@
+{% load static %}
+{% block content %}
+<nav class="navbar">
+    <div class="logo">🚗 CarRental</div>
+    <ul>
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'index' %}">Features</a></li>
+        <li><a href="{% url 'index' %}">FAQs</a></li>
+    </ul>
+    {% comment %} <a href="{% url 'user_signup' %}">Signup</a> {% endcomment %}
+</nav>
+<div class="container">
+    <div class="signup-box">
+        <h2>Signup</h2>
+        <form method="post" class="signup-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+        <p>Already have an Account? <a href="{% url 'user_login' %}" class="login-link">Login</a></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block css %}
+<style>
+    /* Basic styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(45deg, #6c63ff, #3b4cca);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Change from center to allow scrolling */
+    overflow-y: auto; /* Enable scrolling */
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.navbar .logo {
+    font-size: 30px;
+    font-weight: bold;
+    color: #ffcc00;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.navbar .logo:hover {
+    transform: scale(1.1);
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    margin-right: 100px;
+}
+
+.navbar ul li {
+    margin: 0 20px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    color: #ffcc00;
+}
+
+.signup-btn {
+    padding: 12px 24px;
+    background: #ffcc00;
+    border: none;
+    color: black;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.signup-btn:hover {
+    background: #e6b800;
+}
+
+/* Signup Box Styling */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Adjusted to allow scrolling */
+    width: 100%;
+    padding-top: 80px; /* Added padding for the navbar */
+}
+
+.signup-box {
+    margin-top: 40px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 40px;
+    width: 350px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    position: relative;
+    z-index: 1;
+}
+
+h2 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.signup-form p {
+    font-size: 14px;
+    color: #555;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.signup-form input,
+.signup-form button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+.signup-form input:focus {
+    border-color: #6c63ff;
+    outline: none;
+}
+
+.signup-form button {
+    background-color: #6c63ff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.signup-form button:hover {
+    background-color: #5a52e6;
+}
+
+.login-link {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link:hover {
+    color: #5a52e6;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Button Hover Effect */
+.submit-btn:hover {
+    background-color: #5a52e6;
+    transform: scale(1.05);
+}
+
+/* Parallax Background */
+.parallax {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('{% static "your-background-image.jpg" %}') no-repeat center center fixed;
+    background-size: cover;
+    z-index: -1;
+    animation: backgroundScroll 15s linear infinite;
+}
+
+@keyframes backgroundScroll {
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 100%; }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .navbar ul {
+        display: none; /* Hide navbar links on smaller screens */
+    }
+
+    .signup-box {
+        width: 90%; /* Make signup box more flexible */
+        padding: 20px;
+    }
+
+    .signup-btn {
+        width: 100%;
+    }
+}
+
+</style>
+{% endblock %}

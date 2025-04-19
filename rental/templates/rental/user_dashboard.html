@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - Car Rental System</title>
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Google Fonts (Roboto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: linear-gradient(45deg, #2563eb, #1e40af);
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .navbar .logo span {
+            color: #facc15;
+        }
+
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar ul li {
+            margin-left: 30px;
+            position: relative;
+        }
+
+        .navbar ul li a {
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Dropdown Menu Styles */
+        .navbar ul li .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .navbar ul li:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .navbar ul li .dropdown-content a {
+            color: #1e40af;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .navbar ul li .dropdown-content a:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin: 80px auto;
+            padding: 40px;
+            max-width: 1200px;
+        }
+
+        .main-content h2 {
+            font-size: 28px;
+            color: #374151;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .menu-toggle{
+            display:  none;
+        }
+        /* Responsive Styling for Mobile */
+        @media screen and (max-width: 768px) {
+            .navbar ul {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: #1e3a8a;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .navbar ul li {
+                margin: 10px 0;
+            }
+
+            .navbar ul li a {
+                font-size: 18px;
+                color: white;
+            }
+
+            .navbar .menu-toggle {
+                display: block;
+                color: white;
+                font-size: 30px;
+                cursor: pointer;
+            }
+
+            .navbar.active ul {
+                display: flex;
+            }
+        }
+        .profile-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #facc15;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">
+        CR<span>S</span>
+        {% comment %} <h2>Welcome, {{ request.user.fullname }}</h2> {% endcomment %}
+    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <ul>
+        <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'car_list' %}">Browse Cars</a></li>
+        <li><a href="{% url 'my_bookings' %}">My Bookings</a></li>
+        <li>
+            <a href="{% url 'profile' %}">
+                <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}/static/images/default-profile.png{% endif %}" alt="Profile" class="profile-img" />
+            </a>
+        </li>
+        <li><a href="{% url 'user_logout' %}" class="logout">Logout</a></li>
+    </ul>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content">
+    {% block content %}
+    {% comment %} ------ {% endcomment %}
+    {% endblock %}
+</div>
+
+<!-- JS to Toggle Menu for Mobile -->
+<script>
+    function toggleMenu() {
+        const navbar = document.querySelector('.navbar');
+        navbar.classList.toggle('active');
+    }
+</script>
+
+</body>
+</html>
