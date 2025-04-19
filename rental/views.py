@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from .forms import LoginForm,UserSignupForm,ProfileUpdateForm
 from django.db.models import Q
+from datetime import date
 from .models import CustomUser,Brand,Car,Booking,Payment
 from django.contrib.auth.decorators import login_required
 from .forms import BrandForm,CarForm,BookingForm
@@ -58,7 +59,16 @@ def user_logout(request):
     return redirect("user_login")
 
 def user_dashboard(request):
-    return render(request,'rental/user_dashboard.html')
+    user=request.user
+    bookings=Booking.objects.filter(user=user)
+    upcoming_bookings = bookings.filter(status='Confirmed', start_date__gte=date.today()).order_by('start_date')[:3]
+    context = {
+        'upcoming_bookings': upcoming_bookings,
+        'total_bookings': bookings.count(),
+        'completed_trips': bookings.filter(status='Completed').count(),
+        'cancelled_trips': bookings.filter(status='Rejected').count(),
+    }
+    return render(request,'rental/user_dashboard.html',context)
 
 def admin_dashboard(request):
     total_cars = Car.objects.count()
