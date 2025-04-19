@@ -1,54 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Customer Dashboard - Car Rental System</title>
 
-    <!-- Font Awesome CDN -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Google Fonts (Roboto) -->
+    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #facc15;
+            --light-bg: #f3f4f6;
+            --dark: #111827;
+        }
+
         body {
             margin: 0;
             font-family: 'Roboto', sans-serif;
-            background-color: #f3f4f6;
+            background-color: var(--light-bg);
         }
 
-        /* Navbar Styles */
+        /* Navbar */
         .navbar {
             background: linear-gradient(45deg, #2563eb, #1e40af);
-            padding: 10px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            animation: slideDown 0.6s ease;
         }
 
-        .navbar .logo {
-            font-size: 24px;
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .logo {
+            font-size: 26px;
             font-weight: bold;
             color: white;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            cursor: pointer;
+            letter-spacing: 2px;
         }
 
-        .navbar .logo span {
-            color: #facc15;
+        .logo span {
+            color: var(--secondary);
         }
 
         .navbar ul {
+            display: flex;
             list-style: none;
             margin: 0;
             padding: 0;
-            display: flex;
         }
 
         .navbar ul li {
@@ -57,10 +68,10 @@
         }
 
         .navbar ul li a {
-            color: #d1d5db;
+            color: #e5e7eb;
             text-decoration: none;
             font-size: 16px;
-            transition: 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .navbar ul li a:hover {
@@ -68,103 +79,140 @@
             transform: scale(1.05);
         }
 
-        /* Dropdown Menu Styles */
-        .navbar ul li .dropdown-content {
+        .profile-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--secondary);
+            transition: 0.3s;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-toggle {
             display: none;
-            position: absolute;
-            background-color: #fff;
-            min-width: 180px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-
-        .navbar ul li:hover .dropdown-content {
-            display: block;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .navbar ul li .dropdown-content a {
-            color: #1e40af;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .navbar ul li .dropdown-content a:hover {
-            background-color: #f3f4f6;
-        }
-
-        /* Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Main Content Styles */
-        .main-content {
-            margin: 80px auto;
-            padding: 40px;
-            max-width: 1200px;
-        }
-
-        .main-content h2 {
+            color: white;
             font-size: 28px;
-            color: #374151;
-            margin-bottom: 30px;
-            text-align: center;
+            cursor: pointer;
         }
-        .menu-toggle{
-            display:  none;
-        }
-        /* Responsive Styling for Mobile */
+
+        /* Responsive */
         @media screen and (max-width: 768px) {
             .navbar ul {
                 display: none;
                 flex-direction: column;
-                width: 100%;
-                background-color: #1e3a8a;
                 position: absolute;
-                top: 60px;
+                top: 65px;
                 left: 0;
-                right: 0;
-                text-align: center;
+                background-color: var(--primary);
+                width: 100%;
                 padding: 20px;
-            }
-
-            .navbar ul li {
-                margin: 10px 0;
-            }
-
-            .navbar ul li a {
-                font-size: 18px;
-                color: white;
-            }
-
-            .navbar .menu-toggle {
-                display: block;
-                color: white;
-                font-size: 30px;
-                cursor: pointer;
             }
 
             .navbar.active ul {
                 display: flex;
             }
+
+            .menu-toggle {
+                display: block;
+            }
         }
-        .profile-img {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #facc15;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+        .main-content {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px 40px;
         }
-        
-        .profile-img:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+        .main-content h2 {
+            text-align: center;
+            font-size: 30px;
+            color: var(--dark);
+            margin-bottom: 25px;
         }
+
+        .section {
+            margin-bottom: 50px;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cta {
+            background: var(--primary);
+            color: white;
+            padding: 30px;
+            border-radius: 14px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta a {
+            display: inline-block;
+            background: var(--secondary);
+            padding: 12px 28px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-decoration: none;
+            font-weight: bold;
+            color: black;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .cta a:hover {
+            background-color: #fcd34d;
+            transform: scale(1.05);
+        }
+
+        .booking-card {
+            background: white;
+            margin: 10px 0;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .booking-card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .promo-box {
+            background: #fef9c3;
+            border-left: 5px solid var(--secondary);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
     </style>
 </head>
 
@@ -172,10 +220,7 @@
 
 <!-- Navbar -->
 <nav class="navbar">
-    <div class="logo">
-        CR<span>S</span>
-        {% comment %} <h2>Welcome, {{ request.user.fullname }}</h2> {% endcomment %}
-    </div>
+    <div class="logo">CR<span>S</span></div>
     <div class="menu-toggle" onclick="toggleMenu()">☰</div>
     <ul>
         <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
@@ -186,18 +231,64 @@
                 <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}/static/images/default-profile.png{% endif %}" alt="Profile" class="profile-img" />
             </a>
         </li>
-        <li><a href="{% url 'user_logout' %}" class="logout">Logout</a></li>
+        <li><a href="{% url 'user_logout' %}">Logout</a></li>
     </ul>
 </nav>
 
 <!-- Main Content -->
 <div class="main-content">
     {% block content %}
-    {% comment %} ------ {% endcomment %}
+    
+    <h2>Welcome back, {{ request.user.fullname }}!</h2>
+
+    <!-- CTA -->
+    <div class="section cta">
+        <h3>Need a Ride?</h3>
+        <p>Find the perfect car for your next trip.</p>
+        <a href="{% url 'car_list' %}">Browse Cars</a>
+    </div>
+
+    <!-- Upcoming Bookings -->
+    <div class="section">
+        <h3>📅 Upcoming Bookings</h3>
+        {% if upcoming_bookings %}
+            {% for booking in upcoming_bookings %}
+                <div class="booking-card">
+                    <strong>{{ booking.car.name }}</strong><br>
+                    {{ booking.start_date }} → {{ booking.end_date }} | 
+                    <strong>Status: {{ booking.status }}</strong>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No upcoming bookings. <a href="{% url 'car_list' %}">Book one now!</a></p>
+        {% endif %}
+    </div>
+
+    <!-- Stats -->
+    <div class="section stats-container">
+        <div class="stat-card">
+            <h4>Total Bookings</h4>
+            <p style="font-size: 26px;">{{ total_bookings }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>Completed Trips</h4>
+            <p style="font-size: 26px;">{{ completed_trips }}</p>
+        </div>
+        <div class="stat-card">
+            <h4>Cancelled</h4>
+            <p style="font-size: 26px;">{{ cancelled_trips }}</p>
+        </div>
+    </div>
+
+    <!-- Promo -->
+    <div class="section promo-box">
+        <h4>🎉 Special Offer!</h4>
+        <p>Book 3+ days and get <strong>20% off</strong>. Valid until April 30.</p>
+    </div>
+
     {% endblock %}
 </div>
 
-<!-- JS to Toggle Menu for Mobile -->
 <script>
     function toggleMenu() {
         const navbar = document.querySelector('.navbar');
