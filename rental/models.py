@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 import uuid
+from django.core.exceptions import ValidationError
 from datetime import date
 # Create your models here.
 class CustomUserManager(BaseUserManager):
@@ -96,6 +97,13 @@ class Booking(models.Model):
     )
     location = models.CharField(max_length=255, blank=True, null=True)
 
+    def clean(self):
+        # Prevent past dates
+        if self.start_date < date.today():
+            raise ValidationError("Start date cannot be in the past.")
+        if self.end_date < self.start_date:
+            raise ValidationError("End date cannot be before start date.")
+        
     def calculate_total_price(self):
         days=(self.end_date-self.start_date).days+1
         return days*self.car.price_per_day

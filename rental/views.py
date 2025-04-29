@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import BrandForm,CarForm,BookingForm
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.db.models import Sum
+from django.utils import timezone
 # Create your views here.
 
 
@@ -306,19 +307,30 @@ def generate_signature(secret_key, total_amount, transaction_uuid, product_code)
 @login_required
 def book_car(request, car_id):
     car = get_object_or_404(Car, id=car_id)
+    user = request.user
+    today = timezone.now().date()
+
+    # Check for existing bookings for this car by this user
+    previous_bookings = Booking.objects.filter(user=user, car=car).order_by('-end_date')
+    latest_booking = previous_bookings.first()
+
+    # Check if the latest booking hasn't ended or is still pending/confirmed
+    if latest_booking and latest_booking.status in ['Pending', 'Confirmed'] and latest_booking.end_date >= today:
+        messages.error(request, "You cannot book this car again until your previous booking has ended.")
+        return redirect('my_bookings')
 
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
             booking = form.save(commit=False)
-            booking.car = car
-            booking.user = request.user
+            booking.user = request.user            # Set user correctly
+            booking.car = car                      # Set car correctly
             booking.total_price = booking.calculate_total_price()
-            booking.status = 'Pending'  # Set status to Pending
+            booking.status = 'Pending'             # Optional: default is 'Pending'
             booking.save()
 
             messages.success(request, 'Booking created successfully. Please wait for admin approval.')
-            return redirect('my_bookings')  # Redirect to My Bookings
+            return redirect('my_bookings')
     else:
         form = BookingForm()
 
@@ -447,3 +459,5 @@ def profile_view(request):
         form = ProfileUpdateForm(instance=user)
 
     return render(request, 'rental/profile.html', {'form': form, 'user': user})
+
+
